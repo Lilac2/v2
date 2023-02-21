@@ -21,5 +21,9 @@ export default ctx => {
                 }
             }
         ]
+
+        , test() {
+            console.log(ctx.extensions)
+        }
     }
 }

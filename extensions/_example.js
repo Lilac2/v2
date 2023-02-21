@@ -5,8 +5,8 @@ export default ctx => {
     */
 
     return {
-        name: 'exampleModule'                                            // required: module name, used as key for modules object once loaded
-        , displayName: 'Example Module'                                            
+        name: 'exampleModule'                                             // required: module name, used as key for modules object once loaded
+        , displayName: 'Example Module'                                   // optional: if not specified will be set to name property     
         , description: 'This is an example module to demonstrate syntax.' // optional: description for the module
         
         , commands: [                                                        
