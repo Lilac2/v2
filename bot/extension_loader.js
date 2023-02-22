@@ -18,7 +18,7 @@ const resolvePath = filePath => {
     }
 }
 
-class extensionLoader {
+class ExtensionLoader {
     constructor(ctx) {
         this.ctx = ctx
         this.logger = new InternalLogger('LOADER')
@@ -161,4 +161,4 @@ class extensionLoader {
     }
 }
 
-export default extensionLoader 
+export default ExtensionLoader 
