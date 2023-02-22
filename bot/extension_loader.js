@@ -134,7 +134,7 @@ class extensionLoader {
         }
     }
     
-    unload(extensionName) {
+    async unload(extensionName) {
         if (this.ctx.extensions[extensionName]) {
             delete this.ctx.extensions[extensionName]
             this.logger.log(`${extensionName} extension unloaded.`, 'ok')
