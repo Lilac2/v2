@@ -1,7 +1,9 @@
+import { dir } from 'console'
 import * as fs from 'fs'
 import * as path from 'path'
 import { pathToFileURL, fileURLToPath } from 'url'
 import InternalLogger from './internal_logger.js'
+import format from './format.js'
 
 const resolvePath = filePath => {
     if (path.isAbsolute(filePath)) {
@@ -76,6 +78,7 @@ class extensionLoader {
                         , maxArguments: 'number'
                         , arguments: 'object'
                         , callback: 'function'
+                        , cooldown: 'number'
                     }
                     
                     extension.commands.forEach(command => {
@@ -90,16 +93,16 @@ class extensionLoader {
                     extension._locationPath = extensionPath
                     this.ctx.extensions[extension.name] = extension
 
-                    this.logger.log(`${_outOf ? _outOf + ' ' : ''}"${extension.name}" extension loaded.`)
+                    this.logger.log(`${_outOf ? _outOf + ' ' : ''} Loaded "${extension.name}" extension from ${path.basename(extensionPath)}.`, 'ok')
                 })
                 .catch(error => {
                     // TODO - handle error
-                    this.logger.log(`${error}\n\tExtension location: ${extensionPath}`, 'error')
+                    this.logger.log(`${error}\n\tExtension location: ${format(extensionPath, 'UNDERSCORE')}`, 'error')
                     throw error
                 })
         } else {
             // TODO - handle error
-            const error = new Error(`Could not find extension from path given: ${extensionPath}`)
+            const error = new Error(`Could not find extension from path given: ${format(extensionPath, 'UNDERSCORE')}`)
             this.logger.log(error, 'error')
             throw error
         }
@@ -113,7 +116,7 @@ class extensionLoader {
             const files = fs.readdirSync(dirPath)
                 .filter(fileName => !fileName.startsWith('_'))
 
-            this.logger.log(`Loading ${files.length} extensions from directory: ${dirPath}`)
+            this.logger.log(`Loading (${files.length}) extensions from directory: ${format(dirPath, 'UNDERSCORE')}`)
 
             for (let indexString in files) {
                 const index = Number(indexString)
@@ -122,10 +125,10 @@ class extensionLoader {
                 if (!file.startsWith('_')) await this.load(path.resolve(dirPath, file), `(${index + 1}/${files.length})`)
             }
 
-            this.logger.log(`All ${files.length} extensions loaded from directory: ${dirPath}`)
+            this.logger.log(`All ${files.length} extensions loaded from directory: ${format(dirPath, 'UNDERSCORE')}`, 'ok')
         } else {
             // TODO - handle error
-            const error = new Error(`Could not find extension directory from path given: ${dirPath}`)
+            const error = new Error(`Could not find extension directory from path given: ${format(dirPath, 'UNDERSCORE')}`)
             this.logger.log(error, 'error')
             throw error
         }
@@ -134,7 +137,7 @@ class extensionLoader {
     unload(extensionName) {
         if (this.ctx.extensions[extensionName]) {
             delete this.ctx.extensions[extensionName]
-            this.logger.log(`${extensionName} extension unloaded.`)
+            this.logger.log(`${extensionName} extension unloaded.`, 'ok')
         } else {
             // TODO - handle error
             const error = new Error(`Could not find extension named "${extensionName}".`)

@@ -2,12 +2,10 @@ import Discord from 'discord.js'
 import ExtensionLoader from './extension_loader.js'
 import ctx from './context.js'
 import config from '../config.js'
-
+import InternalLogger from './internal_logger.js'
 
 const loader = new ExtensionLoader(ctx)
-
-loader.loadDir('../extensions')
-
+const logger = new InternalLogger('BOT')
 const lilac = new Discord.Client({
     intents: [
         Discord.Intents.FLAGS.GUILD_BANS
@@ -24,7 +22,18 @@ const lilac = new Discord.Client({
     ]
 })
 
+/* initial load of modules, build cache, start bot */
+const startBot = async () => {
+    logger.log('Starting Lilac2 services...')
+    await loader.loadDir(config.bot.extensionsDir)
+
+
+    
+    /* load the other portions of the bot */
 
 
 
+    logger.log('All Lilac2 services online!', 'ok')
+}
 
+startBot()
